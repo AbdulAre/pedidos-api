@@ -1,0 +1,7 @@
+spring.application.name=pedidos-api
+
+spring.datasource.url=jdbc:mysql://localhost:3306/pedidos_api
+spring.datasource.username=example
+spring.datasource.password=example
+
+spring.jpa.hibernate.ddl-auto=update
