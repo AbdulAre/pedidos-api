@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.abdul.pedidos_api.dto.PedidoRequestDTO;
 import com.abdul.pedidos_api.dto.PedidoResponseDTO;
 import com.abdul.pedidos_api.exception.ClienteInexistenteException;
+import com.abdul.pedidos_api.exception.EstadoInvalidoException;
 import com.abdul.pedidos_api.exception.PedidoInexistenteException;
 import com.abdul.pedidos_api.model.Cliente;
 import com.abdul.pedidos_api.model.EstadoPedido;
@@ -42,6 +43,40 @@ public class PedidoService {
 
     public PedidoResponseDTO buscarPorId(Long id){
         return convertirADTO(buscar(id));
+    }
+
+    public PedidoResponseDTO pagar(Long id){
+        Pedido pedido = buscar(id);
+        if(pedido.getEstado() != EstadoPedido.PENDIENTE){
+            throw new EstadoInvalidoException();
+        }
+        pedido.setEstado(EstadoPedido.PAGADO);
+        Pedido guardado = pedidoRep.save(pedido);
+        return convertirADTO(guardado);
+    }
+
+    public PedidoResponseDTO enviar(Long id){
+        Pedido pedido = buscar(id);
+        if(pedido.getEstado() != EstadoPedido.PAGADO){
+            throw new EstadoInvalidoException();
+        }
+        pedido.setEstado(EstadoPedido.ENVIADO);
+        Pedido guardado = pedidoRep.save(pedido);
+        return convertirADTO(guardado);
+
+    }
+
+    public PedidoResponseDTO cancelar(Long id){
+        Pedido pedido = buscar(id);
+        if(pedido.getEstado() == EstadoPedido.PAGADO || pedido.getEstado() == EstadoPedido.PENDIENTE){
+            pedido.setEstado(EstadoPedido.CANCELADO);
+            Pedido guardado = pedidoRep.save(pedido);
+            return convertirADTO(guardado);
+            
+        }
+        else{
+            throw new EstadoInvalidoException();
+        }
     }
 
     private PedidoResponseDTO convertirADTO(Pedido pedido){
