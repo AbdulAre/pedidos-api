@@ -79,6 +79,20 @@ public class PedidoService {
         }
     }
 
+    public List<PedidoResponseDTO>buscarPorCliente(Long id){
+        clienteRep.findById(id).orElseThrow(()->new ClienteInexistenteException(id));
+        return pedidoRep.findByClienteId(id).stream().map(this::convertirADTO).toList();
+
+    }
+
+    public List<PedidoResponseDTO>buscarPorEstado(EstadoPedido estado){
+        return pedidoRep.findByEstado(estado).stream().map(this::convertirADTO).toList();
+    }
+
+    public List<PedidoResponseDTO>listarPorTotalMinimo(double valor){
+        return pedidoRep.findByTotalGreaterThanEqual(valor).stream().map(this::convertirADTO).toList();
+    }
+
     private PedidoResponseDTO convertirADTO(Pedido pedido){
         return new PedidoResponseDTO(pedido.getId(), pedido.getFecha(), pedido.getEstado(), pedido.getTotal(), pedido.getCliente().getId(), pedido.getCliente().getNombre());
     }

@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.abdul.pedidos_api.dto.PedidoRequestDTO;
 import com.abdul.pedidos_api.dto.PedidoResponseDTO;
+import com.abdul.pedidos_api.model.EstadoPedido;
 import com.abdul.pedidos_api.service.PedidoService;
 
 import jakarta.validation.Valid;
@@ -42,6 +44,21 @@ public class PedidoController {
     @PatchMapping("/{id}/cancelar")
     public PedidoResponseDTO cancelar(@PathVariable Long id){
         return service.cancelar(id);
+    }
+
+    @GetMapping("/estado/{estado}")
+    public List<PedidoResponseDTO> listarPorEstado(@PathVariable EstadoPedido estado){
+        return service.buscarPorEstado(estado);
+    }
+
+    @GetMapping("/total-minimo")
+    public List<PedidoResponseDTO> listarPorTotalMinimo(@RequestParam double valor){
+        return service.listarPorTotalMinimo(valor);
+    }
+
+    @GetMapping("/cliente/{clienteId}")
+    public List<PedidoResponseDTO>listarPorCliente(@PathVariable Long clienteId){
+        return service.buscarPorCliente(clienteId);
     }
 
     @PatchMapping("/{id}/enviar")
