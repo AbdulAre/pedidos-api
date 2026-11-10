@@ -11,6 +11,7 @@ import com.abdul.pedidos_api.exception.ClienteInexistenteException;
 import com.abdul.pedidos_api.exception.EmailRepetidoException;
 import com.abdul.pedidos_api.model.Cliente;
 import com.abdul.pedidos_api.repository.ClienteRepository;
+import com.abdul.pedidos_api.exception.ClienteConPedidosException;
 
 @Service 
 public class ClienteService {
@@ -59,6 +60,11 @@ public class ClienteService {
 
     public void eliminar(Long id){
         Cliente cliente = buscar(id);
-        rep.delete(cliente);
+        if(cliente.getPedidos().isEmpty()){
+            rep.delete(cliente);
+        }else{
+            throw new ClienteConPedidosException(id);
+        }
+        
     }
 }

@@ -1,10 +1,14 @@
 package com.abdul.pedidos_api.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity 
 public class Cliente {
@@ -15,6 +19,8 @@ public class Cliente {
     private String nombre; 
     @Column(unique = true, nullable = false)
     private String email;
+    @OneToMany(mappedBy = "cliente")
+    private List<Pedido>pedidos = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -34,6 +40,10 @@ public class Cliente {
     public void setEmail(String email) {
         this.email = email;
     }
+    public List<Pedido> getPedidos() {
+        return pedidos;
+    }
+    
 
     
 }
