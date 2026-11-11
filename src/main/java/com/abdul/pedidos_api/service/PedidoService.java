@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
 
 import com.abdul.pedidos_api.dto.PedidoRequestDTO;
 import com.abdul.pedidos_api.dto.PedidoResponseDTO;
@@ -37,8 +39,8 @@ public class PedidoService {
         return convertirADTO(guardado);
     }
 
-    public List<PedidoResponseDTO>listarTodos(){
-        return pedidoRep.findAll().stream().map(this::convertirADTO).toList();
+    public Page<PedidoResponseDTO>listarTodos(Pageable pageable){
+        return pedidoRep.findAll(pageable).map(this::convertirADTO);
     }
 
     public PedidoResponseDTO buscarPorId(Long id){

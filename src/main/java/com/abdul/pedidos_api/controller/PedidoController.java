@@ -2,6 +2,8 @@ package com.abdul.pedidos_api.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -32,8 +34,8 @@ public class PedidoController {
     }
 
     @GetMapping 
-    public List<PedidoResponseDTO>listarTodos(){
-        return service.listarTodos();
+    public Page<PedidoResponseDTO>listarTodos(Pageable pageable){
+        return service.listarTodos(pageable);
     }
 
     @GetMapping("/{id}")
